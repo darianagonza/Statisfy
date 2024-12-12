@@ -1,0 +1,117 @@
+---
+title: "README for Statisfy"
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# Statisfy
+
+<!-- badges: start -->
+<!-- badges: end -->
+![Statisfy Hex Sticker](man/figures/statisfy_hex.png)
+
+The **Statisfy** package is a statistician's best friend. After using this 
+package, hardworking statisticians can't help but be left with a big smile on 
+their face (just look at our hex sticker). Statisfy is designed to streamline 
+common statistical tasks with user-friendly functions that identify outliers, 
+output summary statistics, check if data follows a normal distribution, and even 
+suggest statistical tests that are appropriate for the user's needs.
+
+
+## Installation
+
+You can install the development version of Statisfy like so:
+
+``` r
+install.packages("devtools")
+devtools::install_github("darianagonza/Statisfy")
+```
+## Example Dataset
+
+Statisfy comes with a built-in dataset, `thesis_data`, which is a subset of a 
+larger dataset containing ecological data from Odzala-Kokoua National Park in 
+the Republic of Congo. This data was collected and provided by Dariana Gonzalez, 
+who is using the data for her senior thesis. 
+
+Here's a quick look at the data:
+```{r}
+library(Statisfy)
+head(thesis_data)
+```
+## Package features 
+
+### 1. Check for normality using `checkNormality()`
+
+Determine whether a numeric variable in a dataset follows a normal distribution 
+by inputting the dataframe, the variable, and a line color into `checkNormality()`. 
+The function will output a histogram of the variable, a QQ plot, and the results 
+of a Shapiro-Wilk test, providing a definitive answer for whether the variable 
+indeed follows a normal distribution. This function can be a prerequisite  for 
+the function `whichTest()`, which is described later on. 
+
+Let's take a look two quick examples: 
+
+```{r}
+# Not normally distributed (choose a nonparametric statistical test)
+checkNormality(data = thesis_data, rel_humidity, line_color = "blue")
+
+# `ecosystem` is not a numeric variable, so the function will return an error
+# The .Rmd will not render if the function is actually run, but this is how this 
+# example would look:
+# checkNormality(data = thesis_data, ecosystem, line_color = "red")
+```
+
+### 2. Choose the right form of statistical analysis using `whichTest()`
+
+With dozens of statistical tests available, it is often difficult to know which 
+one is most appropriate for which occasion. `whichTest()` addresses this issue 
+by taking in up to two variables and, based on the class of the data and the 
+number and levels of the variables, outputs a parametric and non-parametric 
+statistical test that can be used to analyze those variables. 
+
+```{r}
+# One numeric variable and one categorical variable (with 3 levels) 
+whichTest(data = thesis_data, var1 = "temp_air", var2 = "ecosystem")
+
+# Two numeric variables
+whichTest(data = thesis_data, var1 = "temp_air", var2 = "rel_humidity")
+
+# One categorical variable
+whichTest(data = thesis_data, var1 = "ecosystem")
+```
+### 3. Use `outliers()` to detect outliers
+
+`outliers()` allows the user to identify which points within a numeric variable 
+deviate significantly from the mean and set the percentile thresholds that will 
+be used to identify those outliers. By default, this function uses the 1st and 
+99th percentiles. 
+
+```{r}
+outliers(thesis_data$temp_air, upper = 0.92, lower = 0.08)
+```
+### 4. Calculate key statistics using `stats()`
+
+In order to choose between more advanced forms of statistical analysis, sometimes 
+users must have more detailed summary statistics of their data, including 
+information about dispersion. `stats()` helps the user obtain more detailed 
+statistics on a numeric variable that summary() cannot provide, and it does so 
+in the form of a nice APA-style table (ready for publication!).
+
+```{r}
+stats(thesis_data$rel_humidity)
+```
+### Authors
+
+This package was designed by Dariana Gonzalez and Yahir Santillan for a STAT 108 
+final project.
+**Statisfy**: A Statistician's Best Friend!

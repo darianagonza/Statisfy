@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Introduction to Statisfy</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Introduction to Statisfy</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(Statisfy)</span></code></pre></div>
+<p>Welcome to the <strong>Statisfy</strong> (A statistician’s best
+friend) package vignette! This document introduces the functionalities
+of the package and demonstrates how its functions can streamline common
+statistical tasks.</p>
+<p>To showcase the utility of our functions, we will use the dataset
+<code>thesis_data</code>. This dataset contains real data on the
+environmental conditions of a variety of ecosystems throughout
+Odzala-Kokoua National Park in the Republic of Congo, which is being
+utilized by Dariana for her undergraduate thesis.</p>
+<div id="data-thesis_data" class="section level3">
+<h3>Data: thesis_data</h3>
+<p>The <code>thesis_data</code> dataset contains a range of values, but
+for our purposes we’ll focus on <code>temp_air</code> and
+<code>rel_humidity</code></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">head</span>(thesis_data)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="sc">&gt;</span>         plot_id transect_id bai_id ecosystem audiomoth ph_water temp_water</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="sc">&gt;</span> <span class="dv">1</span>  ambe_f315_15         <span class="dv">315</span>   ambe       eco         <span class="dv">8</span>       <span class="cn">NA</span>         <span class="cn">NA</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="sc">&gt;</span> <span class="dv">2</span> ambe_f315_315         <span class="dv">315</span>   ambe       <span class="cf">for</span>         <span class="dv">6</span>       <span class="cn">NA</span>         <span class="cn">NA</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="sc">&gt;</span> <span class="dv">3</span>  ambe_f225_15         <span class="dv">225</span>   ambe       eco         <span class="dv">2</span>       <span class="cn">NA</span>         <span class="cn">NA</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="sc">&gt;</span> <span class="dv">4</span> ambe_f225_315         <span class="dv">225</span>   ambe       <span class="cf">for</span>        <span class="dv">14</span>       <span class="cn">NA</span>         <span class="cn">NA</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="sc">&gt;</span> <span class="dv">5</span>  ambe_f45_155          <span class="dv">45</span>   ambe       <span class="cf">for</span>        <span class="dv">15</span>       <span class="cn">NA</span>         <span class="cn">NA</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="sc">&gt;</span> <span class="dv">6</span>   ambe_f45_15          <span class="dv">45</span>   ambe       eco        <span class="dv">10</span>       <span class="cn">NA</span>         <span class="cn">NA</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="sc">&gt;</span>   temp_air rel_humidity total_spp dist_score</span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="sc">&gt;</span> <span class="dv">1</span>     <span class="fl">73.9</span>         <span class="fl">89.1</span>         <span class="dv">0</span>         <span class="cn">NA</span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="sc">&gt;</span> <span class="dv">2</span>     <span class="fl">74.8</span>         <span class="fl">94.0</span>         <span class="dv">0</span>         <span class="cn">NA</span></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="sc">&gt;</span> <span class="dv">3</span>     <span class="fl">79.0</span>         <span class="fl">93.3</span>         <span class="dv">0</span>         <span class="cn">NA</span></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a><span class="sc">&gt;</span> <span class="dv">4</span>     <span class="fl">79.0</span>         <span class="fl">85.6</span>         <span class="dv">0</span>         <span class="cn">NA</span></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="sc">&gt;</span> <span class="dv">5</span>     <span class="fl">82.2</span>         <span class="fl">75.5</span>         <span class="dv">0</span>         <span class="cn">NA</span></span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a><span class="sc">&gt;</span> <span class="dv">6</span>     <span class="fl">86.1</span>         <span class="fl">64.5</span>         <span class="dv">0</span>         <span class="cn">NA</span></span></code></pre></div>
+</div>
+<div id="understand-distribution-with-checknormality" class="section level3">
+<h3>Understand distribution with <code>checkNormality()</code></h3>
+<p><code>checkNormality()</code> helps you evaluate whether a numeric
+variable follows a normal distribution by taking in a numeric variable
+from a dataset and using it to output a histogram, a QQ plot, and a
+Shapiro-Wilk test result. These are typically all of the normality tests
+we have to run before performing statistical analysis, so this function
+is designed to streamline this precursive step.</p>
+<p>In the following example, we utilize <code>checkNormality()</code> to
+visualize air temperature follows a normal distribution.</p>
+<p>NOTE TO GRADERS: SINCE MOST OF THESE FUNCTIONS REQUIRE THE USE OF
+NUMERIC DATA, IT IS POSSIBLE THAT RUNNING THEM WITH THE MOUSE DATA WILL
+YIELD AN ERROR MESSAGE (BUILT INTO THE FUNCTIONS).</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">checkNormality</span>(<span class="at">data =</span> thesis_data, temp_air, <span class="at">line_color =</span> <span class="st">&quot;red&quot;</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="sc">&gt;</span> Shapiro<span class="sc">-</span>Wilk Test<span class="sc">:</span> p<span class="sc">-</span>value <span class="ot">=</span><span class="fl">0.0265</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="sc">&gt;</span> <span class="st">`</span><span class="at">stat_bin()</span><span class="st">`</span> using <span class="st">`</span><span class="at">bins = 30</span><span class="st">`</span>. Pick better value with <span class="st">`</span><span class="at">binwidth</span><span class="st">`</span>.</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,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" /><!-- --></p>
+<p>With the help of the variety of graphs and results output, we can see
+that air temperature in fact does not follow a normal distribution.</p>
+</div>
+<div id="choose-appropriate-tests-with-whichtest" class="section level3">
+<h3>Choose Appropriate Tests with <code>whichTest()</code></h3>
+<p><code>whichTest()</code> helps you select the correct statistical
+test to use for data analysis based on the type of data the variable is,
+the levels of the variable that exist, and the number of variables you
+wish to analyze. The function will output two of the following
+recommendations (one parametric test and one non-parametric test):</p>
+<ul>
+<li>ANOVA</li>
+<li>Bar/Pie chart</li>
+<li>Chi-Square test</li>
+<li>Independent t-test</li>
+<li>Kruskal-Wallis Test</li>
+<li>Linear Regression</li>
+<li>Mann-Whitney Test</li>
+<li>Paired t-test</li>
+<li>Pearson Correlation Test</li>
+<li>Shapiro-Wilk Test</li>
+<li>Spearman Correlation Test</li>
+<li>U-test</li>
+<li>Wilcoxon Signed-Ranked Test</li>
+</ul>
+<p>If we were interested in the variables <code>temp_air</code> and
+<code>ecosystem</code> to analyze whether a relationship exists between
+air temperature and type of ecosystem but were unsure of which test to
+use, we would use <code>whichTest()</code> and receive an immediate and
+reliable recommendation.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">whichTest</span>(<span class="at">data =</span> thesis_data, <span class="at">var1 =</span> <span class="st">&quot;temp_air&quot;</span>, <span class="at">var2 =</span> <span class="st">&quot;ecosystem&quot;</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="sc">&gt;</span> [<span class="dv">1</span>] <span class="st">&quot;Use a One-Way ANOVA to determine whether there are significant differences between 3+ groups (normal distribution). Use a Kruskal-Wallis Test if data is not normally distributed.&quot;</span></span></code></pre></div>
+<p>This recommendation is correct since ecosystem type is a categorical
+variable with 3 levels while air temperature is a numeric variable.</p>
+<p>In the case that the function cannot make an appropriate
+recommendation, the following message will be displayed:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="do">## Error in whichTest(df, var1, var2) : This variable type is not supported. Please check your variable type for errors and try again.</span></span></code></pre></div>
+</div>
+<div id="identify-outliers-with-outliers" class="section level3">
+<h3>Identify outliers with <code>outliers()</code></h3>
+<p><code>outliers()</code> is an easy way to identify outliers within a
+dataset based on desired thresholds. By default, the function will use
+99th percentile and the 1st percentile when determining what to classify
+as an outlier.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># Outliers that are in the above the 99th percentile and below the 1st percentile</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">outliers</span>(thesis_data<span class="sc">$</span>temp_air, <span class="at">upper =</span> <span class="fl">0.95</span>, <span class="at">lower =</span> <span class="fl">0.05</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="sc">&gt;</span> <span class="er">$</span>Lower_Bound</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="sc">&gt;</span>     <span class="dv">5</span>% </span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fl">74.935</span> </span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="sc">&gt;</span> </span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="er">&gt;</span> <span class="er">$</span>Upper_Bound</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="sc">&gt;</span>   <span class="dv">95</span>% </span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fl">90.82</span> </span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="sc">&gt;</span> </span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="er">&gt;</span> <span class="er">$</span>Outliers</span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="sc">&gt;</span>  [<span class="dv">1</span>] <span class="fl">73.9</span> <span class="fl">74.8</span> <span class="fl">91.0</span> <span class="fl">92.7</span> <span class="fl">74.3</span> <span class="fl">91.7</span> <span class="fl">92.0</span> <span class="fl">92.4</span> <span class="fl">74.4</span> <span class="fl">74.7</span></span></code></pre></div>
+<p>The user may set their desired threshold to classify an observation
+as an outlier by changing the function in the following way</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># Outliers that are above the 89th percentile and below the 12th percentile</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">outliers</span>(thesis_data<span class="sc">$</span>temp_air, <span class="fl">0.89</span>, <span class="fl">0.12</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="sc">&gt;</span> <span class="er">$</span>Lower_Bound</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="sc">&gt;</span>  <span class="dv">12</span>% </span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fl">76.5</span> </span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="sc">&gt;</span> </span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="er">&gt;</span> <span class="er">$</span>Upper_Bound</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="sc">&gt;</span>    <span class="dv">89</span>% </span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fl">89.668</span> </span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="sc">&gt;</span> </span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="er">&gt;</span> <span class="er">$</span>Outliers</span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="sc">&gt;</span>  [<span class="dv">1</span>] <span class="fl">73.9</span> <span class="fl">74.8</span> <span class="fl">91.0</span> <span class="fl">90.4</span> <span class="fl">92.7</span> <span class="fl">74.3</span> <span class="fl">76.2</span> <span class="fl">75.9</span> <span class="fl">75.6</span> <span class="fl">90.6</span> <span class="fl">76.4</span> <span class="fl">91.7</span> <span class="fl">90.5</span> <span class="fl">90.3</span> <span class="fl">92.0</span></span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="sc">&gt;</span> [<span class="dv">16</span>] <span class="fl">92.4</span> <span class="fl">74.4</span> <span class="fl">74.7</span> <span class="fl">75.1</span> <span class="fl">90.3</span></span></code></pre></div>
+</div>
+<div id="summary-statistics-with-stats" class="section level3">
+<h3>Summary statistics with <code>stats()</code></h3>
+<p><code>stats()</code> provides a detailed list of summary statistics
+of a variable, given that it is numeric. These summary statistics are
+designed to make it easier to choose between more complicated forms of
+statistical analysis that require knowledge of data dispersion (ex: beta
+regression). The function will provide the following statistics:</p>
+<ul>
+<li>Mean</li>
+<li>Variance</li>
+<li>Standard Deviation</li>
+<li>Minimum value</li>
+<li>Maximum value</li>
+<li>25th percentile</li>
+<li>Median</li>
+<li>75th percentile</li>
+<li>Coefficient of Variation</li>
+</ul>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">stats</span>(thesis_data<span class="sc">$</span>rel_humidity)</span></code></pre></div>
+<table>
+<colgroup>
+<col width="3%" />
+<col width="8%" />
+<col width="8%" />
+<col width="8%" />
+<col width="4%" />
+<col width="4%" />
+<col width="15%" />
+<col width="6%" />
+<col width="15%" />
+<col width="23%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">Mean</th>
+<th align="right">Variance</th>
+<th align="right">StDev</th>
+<th align="right">Min</th>
+<th align="right">Max</th>
+<th align="right">X25th.Percentile</th>
+<th align="right">Median</th>
+<th align="right">X75th.Percentile</th>
+<th align="right">Coefficient_of_Variation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">25%</td>
+<td align="right">77.30556</td>
+<td align="right">211.0035</td>
+<td align="right">14.52596</td>
+<td align="right">45.2</td>
+<td align="right">99.1</td>
+<td align="right">66.525</td>
+<td align="right">77.7</td>
+<td align="right">89.4</td>
+<td align="right">0.1879032</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,125 @@
+---
+title: "Introduction to Statisfy"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to Statisfy}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = T, 
+                      comment = ">")
+options(tibble.print_min = 4L, tibble.print_max = 4L)
+```
+
+```{r}
+library(Statisfy)
+```
+Welcome to the **Statisfy** (A statistician's best friend) package vignette! This document introduces the 
+functionalities of the package and demonstrates how its functions can streamline 
+common statistical tasks.
+
+To showcase the utility of our functions, we will use the dataset `thesis_data`. 
+This dataset contains real data on the environmental conditions of a variety of 
+ecosystems throughout Odzala-Kokoua National Park in the Republic of Congo, 
+which is being utilized by Dariana for her undergraduate thesis.
+
+### Data: thesis_data
+The `thesis_data` dataset contains a range of values, but for our purposes we'll 
+focus on `temp_air` and `rel_humidity`
+
+```{r}
+head(thesis_data)
+```
+
+### Understand distribution with `checkNormality()`
+`checkNormality()` helps you evaluate whether a numeric variable follows a 
+normal distribution by taking in a numeric variable from a dataset and using it 
+to output a histogram, a QQ plot, and a Shapiro-Wilk test result. These are 
+typically all of the normality tests we have to run before performing statistical 
+analysis, so this function is designed to streamline this precursive step.
+
+In the following example, we utilize `checkNormality()` to visualize air 
+temperature follows a normal distribution. 
+
+NOTE TO GRADERS: SINCE MOST OF THESE FUNCTIONS REQUIRE THE USE OF NUMERIC DATA,
+IT IS POSSIBLE THAT RUNNING THEM WITH THE MOUSE DATA WILL YIELD AN ERROR MESSAGE
+(BUILT INTO THE FUNCTIONS).
+
+```{r}
+checkNormality(data = thesis_data, temp_air, line_color = "red")
+```
+
+With the help of the variety of graphs and results output, we can see that air
+temperature in fact does not follow a normal distribution.
+
+### Choose Appropriate Tests with `whichTest()`
+`whichTest()` helps you select the correct statistical test to use for data 
+analysis based on the type of data the variable is, the levels of the variable
+that exist, and the number of variables you wish to analyze. The function will 
+output two of the following recommendations (one parametric test and one 
+non-parametric test):
+
+* ANOVA
+* Bar/Pie chart
+* Chi-Square test
+* Independent t-test
+* Kruskal-Wallis Test
+* Linear Regression
+* Mann-Whitney Test
+* Paired t-test
+* Pearson Correlation Test
+* Shapiro-Wilk Test
+* Spearman Correlation Test
+* U-test
+* Wilcoxon Signed-Ranked Test
+
+If we were interested in the variables `temp_air` and `ecosystem` to analyze
+whether a relationship exists between air temperature and type of ecosystem but 
+were unsure of which test to use, we would use `whichTest()` and receive an
+immediate and reliable recommendation.
+
+```{r}
+whichTest(data = thesis_data, var1 = "temp_air", var2 = "ecosystem")
+```
+This recommendation is correct since ecosystem type is a categorical variable
+with 3 levels while air temperature is a numeric variable. 
+
+In the case that the function cannot make an appropriate recommendation, the following message will be displayed:
+
+```{r}
+## Error in whichTest(df, var1, var2) : This variable type is not supported. Please check your variable type for errors and try again.
+```
+
+### Identify outliers with `outliers()`
+`outliers()` is an easy way to identify outliers within a dataset based on desired thresholds. By default, the function will use 99th percentile and the 1st percentile when determining what to classify as an outlier.
+
+```{r}
+# Outliers that are in the above the 99th percentile and below the 1st percentile
+outliers(thesis_data$temp_air, upper = 0.95, lower = 0.05)
+```
+
+The user may set their desired threshold to classify an observation as an outlier by changing the function in the following way
+
+```{r}
+# Outliers that are above the 89th percentile and below the 12th percentile
+outliers(thesis_data$temp_air, 0.89, 0.12)
+```
+
+### Summary statistics with `stats()`
+`stats()` provides a detailed list of summary statistics of a variable, given that it is numeric. These summary statistics are designed to make it easier to choose between more complicated forms of statistical analysis that require knowledge of data dispersion (ex: beta regression). The function will provide the following statistics:
+
+* Mean
+* Variance
+* Standard Deviation
+* Minimum value
+* Maximum value
+* 25th percentile
+* Median
+* 75th percentile
+* Coefficient of Variation
+ 
+```{r}
+stats(thesis_data$rel_humidity)
+```
